@@ -7,12 +7,17 @@ Shader "Custom/Skybox"
         [NoScaleOffset] _SunViewGrad ("Sun-View gradient", 2D) = "white" {}
         [NoScaleOffset] _MoonCubeMap ("Moon Cube Map", Cube) = "black" {}
         [NoScaleOffset] _StarCubeMap ("Star Cube Map", Cube) = "black" {}
+        [NoScaleOffset] _ConstellationCubeMap ("Constellation Cube Map", Cube) = "black" {}
         
         _SunRadius ("Sun radius", Range(0,1)) = 0.05
         _MoonRadius ("Moon radius", Range(0,1)) = 0.05
         _MoonExposure ("Moon Exposure", Range(-16, 16)) = 0
         _StarExposure ("Star Exposure", Range(-16, 16)) = 0
         _StarPower ("Star Power", Range(1,5)) = 1
+        
+        _StarLatitude ("Star Latitude", Range(-90, 90)) = 0
+        _StarSpeed ("Star Speed", Float) = 0.001
+        _ConstellationColor ("Constellation color", Color) = (0, 0.3, 0.6, 1)
     }
     SubShader
     {
@@ -73,6 +78,7 @@ Shader "Custom/Skybox"
             TEXTURE2D(_SunViewGrad);  SAMPLER(sampler_SunViewGrad);
             TEXTURECUBE(_MoonCubeMap); SAMPLER(sampler_MoonCubeMap);
             TEXTURECUBE(_StarCubeMap); SAMPLER(sampler_StarCubeMap);
+            TEXTURECUBE(_ConstellationCubeMap); SAMPLER(sampler_ConstellationCubeMap);
             
             float3 _SunDir, _MoonDir;
             float4x4 _MoonSpaceMatrix;
@@ -82,6 +88,8 @@ Shader "Custom/Skybox"
             float _SunRadius, _MoonRadius;
             float _MoonExposure, _StarExposure;
             float _StarPower;
+            float _StarLatitude, _StarSpeed;
+            float3 _ConstellationColor;
 
             float3 GetMoonTexture(float3 normal)
             {
@@ -106,6 +114,23 @@ Shader "Custom/Skybox"
                     t * x * y + s * z, t * y * y + c, t * y * z - s * x,
                     t * x * z - s * y, t * y * z + s * x, t * z * z + c
                     );
+            }
+
+            // Rotate the view direction, tilt with latitude, spin with time
+            float3 GetStarUVW(float3 viewDir, float latitude, float localSiderealTime)
+            {
+                // tilt = 0 at the north pole, where latitude = 90 degrees
+                float tilt = PI * (latitude - 90) / 180;
+                float3x3 tiltRotation = AngleAxis3x3(tilt, float3(1,0,0));
+
+                // 0.75 is a texture offset for lST = 0 equals noon
+                float spin = (0.75-localSiderealTime) * 2 * PI;
+                float3x3 spinRotation = AngleAxis3x3(spin, float3(0, 1, 0));
+
+                // The order of rotation is important
+                float3x3 fullRotation = mul(spinRotation, tiltRotation);
+
+                return mul(fullRotation,  viewDir);
             }
 
             float4 Fragment (v2f IN) : SV_TARGET
@@ -142,15 +167,28 @@ Shader "Custom/Skybox"
                 float3 moonTexture = GetMoonTexture(moonNormal);
                 float3 moonColor = moonMask * moonNdotL * exp2(_MoonExposure) * moonTexture;
 
+                // Solar eclipse
+                float solarEclipse01 = smoothstep(1 - _SunRadius * _SunRadius, 1.0, sunMoonDot);
+                skyColor *= lerp(1, 0.2, solarEclipse01);
+                sunColor *= (1 - moonMask) * lerp(1, 16, solarEclipse01);
+
+                // Lunar eclipse
+                float lunarEclipseMask = 1 - step(1 - _SunRadius * _SunRadius, -sunViewDot);
+                float lunarEclipse01 = smoothstep(1 - _SunRadius * _SunRadius * 0.05, 1.0, -sunMoonDot);
+                moonColor *= lerp(lunarEclipseMask, float3(0.3,0.05,0), lunarEclipse01);
+
                 // star map
-                float3 starUVW = viewDir;
+                float3 starUVW = GetStarUVW(viewDir, _StarLatitude, _Time.y * _StarSpeed % 1);
                 float3 starColor = SAMPLE_TEXTURECUBE_BIAS(_StarCubeMap, sampler_StarCubeMap, starUVW, -1).rgb;
                 starColor = pow(abs(starColor), _StarPower);
 
                 float starStrength = (1 - sunViewDot01) * (saturate(-sunZenithDot));
                 starColor = starColor * (1 - sunMask) * (1 - moonMask) * exp2(_StarExposure) * starStrength;
+
+                float3 constellaColor = SAMPLE_TEXTURECUBE(_ConstellationCubeMap, sampler_ConstellationCubeMap, starUVW).rgb * _ConstellationColor;
+                constellaColor = constellaColor * (1 - sunMask) * (1 - moonMask) * starStrength;
                 
-                float3 col = skyColor + sunColor + moonColor + starColor;
+                float3 col = skyColor + sunColor + moonColor + starColor + constellaColor;
                 
                 return float4(col, 1);
             }
