@@ -150,6 +150,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 29.932, z: 0}
+--- !u!1 &265644422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 265644424}
+  - component: {fileID: 265644423}
+  m_Layer: 0
+  m_Name: MoonPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &265644423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265644422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40e6dfb7d3715d4bbc51de61cea2377, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  d: 0
+  dBias: 0.5
+  yearDay: 27.55
+  latitude: 0
+  longitude: 0
+  tilt: 31.2
+  sun: {fileID: 643601566}
+--- !u!4 &265644424
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265644422}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1457160913}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -922,7 +973,7 @@ Transform:
   - {fileID: 481863584}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1309292128
+--- !u!1 &1457160911
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -930,52 +981,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1309292130}
-  - component: {fileID: 1309292129}
+  - component: {fileID: 1457160913}
+  - component: {fileID: 1457160912}
   m_Layer: 0
-  m_Name: SunMoonDirection
+  m_Name: DayIncreaseTool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1309292129
+--- !u!114 &1457160912
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309292128}
-  m_Enabled: 0
+  m_GameObject: {fileID: 1457160911}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5940b1e48ad9cf242bea1724ba18022a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2bc432687756cf944911b28294bbc088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  day: 42
-  hour: 0
-  latitude: 42
-  longitude: 0
-  timezone: 0
-  sunDirection: {x: 0, y: 0, z: 0}
-  moonDirection: {x: 0, y: 0, z: 0}
-  _Sun: {fileID: 410087041}
-  _Moon: {fileID: 643601566}
-  _autoProgress: 0
-  HoursPerSeconds: 8
-  DayPer24Hours: 1
---- !u!4 &1309292130
+  DayPerSecond: 0.1
+  isEnable: 1
+  celestialBodies:
+  - {fileID: 1691879615}
+  - {fileID: 265644423}
+--- !u!4 &1457160913
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309292128}
+  m_GameObject: {fileID: 1457160911}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.06167, y: 1, z: -0.13157}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1691879616}
+  - {fileID: 265644424}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1537485821
@@ -1024,6 +1070,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1691879614
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1691879616}
+  - component: {fileID: 1691879615}
+  m_Layer: 0
+  m_Name: SunPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1691879615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691879614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40e6dfb7d3715d4bbc51de61cea2377, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  d: 0
+  dBias: 0
+  yearDay: 365
+  latitude: 0
+  longitude: 0
+  tilt: 23.5
+  sun: {fileID: 410087041}
+--- !u!4 &1691879616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691879614}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1457160913}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1037,4 +1134,4 @@ SceneRoots:
   - {fileID: 1537485823}
   - {fileID: 212454475}
   - {fileID: 1156297780}
-  - {fileID: 1309292130}
+  - {fileID: 1457160913}
