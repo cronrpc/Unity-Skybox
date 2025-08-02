@@ -31,22 +31,22 @@ public class CelestialBodyPosition : MonoBehaviour
         float orbitAngle = ((d + dBias) / yearDay) * 360f;        // Orbital angle (ecliptic longitude)
 
         // Convert to radians
-        float φ = latitude * Mathf.Deg2Rad;               // Latitude
-        float λ = longitude * Mathf.Deg2Rad;              // Longitude
-        float ε = tilt * Mathf.Deg2Rad;                   // Axial tilt
+        float phi = latitude * Mathf.Deg2Rad;               // Latitude
+        float lambda = longitude * Mathf.Deg2Rad;              // Longitude
+        float epsilon = tilt * Mathf.Deg2Rad;                   // Axial tilt
         float L = orbitAngle * Mathf.Deg2Rad;             // Ecliptic longitude
-        float H = (λ - selfAngle * Mathf.Deg2Rad);        // Hour angle (adjusted by longitude)
+        float H = (lambda - selfAngle * Mathf.Deg2Rad);        // Hour angle (adjusted by longitude)
 
-        // —— 2. Calculate Solar Declination δ —— //
-        float δ = Mathf.Asin(Mathf.Sin(ε) * Mathf.Sin(L));
+        // —— 2. Calculate Solar Declination sigma —— //
+        float sigma = Mathf.Asin(Mathf.Sin(epsilon) * Mathf.Sin(L));
 
         // —— 3. Calculate Solar Altitude (alt) and Azimuth (az) —— //
-        float sinAlt = Mathf.Sin(φ) * Mathf.Sin(δ)
-                     + Mathf.Cos(φ) * Mathf.Cos(δ) * Mathf.Cos(H);
+        float sinAlt = Mathf.Sin(phi) * Mathf.Sin(sigma)
+                     + Mathf.Cos(phi) * Mathf.Cos(sigma) * Mathf.Cos(H);
         float alt = Mathf.Asin(sinAlt);
 
-        float cosAz = (Mathf.Sin(δ) - Mathf.Sin(alt) * Mathf.Sin(φ))
-                    / (Mathf.Cos(alt) * Mathf.Cos(φ));
+        float cosAz = (Mathf.Sin(sigma) - Mathf.Sin(alt) * Mathf.Sin(phi))
+                    / (Mathf.Cos(alt) * Mathf.Cos(phi));
         cosAz = Mathf.Clamp(cosAz, -1f, 1f);
         float az = Mathf.Acos(cosAz);
 
