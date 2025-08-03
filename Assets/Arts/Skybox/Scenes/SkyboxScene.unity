@@ -180,11 +180,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   d: 0
-  dBias: 0.5
-  yearDay: 27.55
+  dBias: 37.59
+  yearDay: 14.8
   latitude: 0
   longitude: 0
-  tilt: 31.2
+  tilt: 0
   sun: {fileID: 643601566}
 --- !u!4 &265644424
 Transform:
@@ -1002,7 +1002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bc432687756cf944911b28294bbc088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DayPerSecond: 0.1
+  DayPerSecond: 0.15
   isEnable: 1
   celestialBodies:
   - {fileID: 1691879615}
